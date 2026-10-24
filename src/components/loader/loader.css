@@ -1,0 +1,48 @@
+/* Loader Specific Styling & Fallback Animations */
+
+@keyframes loaderScanlineSweep {
+  0% {
+    top: 0%;
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.9;
+  }
+  60% {
+    top: 55%;
+    opacity: 0.8;
+  }
+  100% {
+    top: 52%;
+    opacity: 0.25;
+  }
+}
+
+.animate-loader-scanline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent 0%, rgba(232, 184, 109, 0.7) 35%, rgba(0, 212, 255, 0.85) 50%, rgba(232, 184, 109, 0.7) 65%, transparent 100%);
+  box-shadow: 0 0 12px rgba(232, 184, 109, 0.8);
+  animation: loaderScanlineSweep 2.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  pointer-events: none;
+  z-index: 25;
+}
+
+/* WebGL Fallback CSS Stars */
+.webgl-fallback-bg {
+  background: radial-gradient(circle at 50% 35%, #0d1525 0%, #070b14 45%, #05070a 100%);
+}
+
+.fallback-star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: fallbackTwinkle 2s infinite ease-in-out alternate;
+}
+
+@keyframes fallbackTwinkle {
+  0% { opacity: 0.2; transform: scale(0.8); }
+  100% { opacity: 0.9; transform: scale(1.2); }
+}

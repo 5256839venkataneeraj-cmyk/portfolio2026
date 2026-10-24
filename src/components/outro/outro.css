@@ -1,0 +1,74 @@
+@keyframes outroScanline {
+  0% {
+    top: 0%;
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.85;
+  }
+  70% {
+    top: 50%;
+    opacity: 0.6;
+  }
+  100% {
+    top: 48%;
+    opacity: 0.2;
+  }
+}
+
+.animate-outro-scanline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent 0%, rgba(232, 184, 109, 0.75) 30%, rgba(0, 212, 255, 0.9) 50%, rgba(232, 184, 109, 0.75) 70%, transparent 100%);
+  box-shadow: 0 0 14px rgba(232, 184, 109, 0.8);
+  animation: outroScanline 2.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  pointer-events: none;
+  z-index: 15;
+}
+
+.outro-fallback-bg {
+  background: radial-gradient(circle at 50% 30%, #0c1424 0%, #060912 50%, #05070a 100%);
+}
+
+.outro-fallback-star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: outroFallbackTwinkle 2.2s infinite ease-in-out alternate;
+}
+
+@keyframes outroFallbackTwinkle {
+  0% { opacity: 0.2; transform: scale(0.8); }
+  100% { opacity: 0.95; transform: scale(1.2); }
+}
+
+/* ── Skills Ticker Marquee ── */
+@keyframes tickerSlide {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-skills-ticker {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: tickerSlide 32s linear infinite;
+}
+
+.animate-skills-ticker:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-skills-ticker {
+    animation: none;
+  }
+  .animate-outro-scanline {
+    display: none;
+  }
+}

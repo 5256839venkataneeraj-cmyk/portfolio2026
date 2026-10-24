@@ -1,0 +1,206 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro", "Space Grotesk", "Inter", -system-ui, sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro", "Space Grotesk", "Inter", -system-ui, sans-serif;
+  --font-mono: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro", "Space Grotesk", "Inter", "Helvetica Neue", Arial, sans-serif;
+  
+  --font-serif: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro", "Space Grotesk", "Inter", -system-ui, sans-serif;
+  
+  --color-space-black: #05070B;
+  --color-space-dark: #0A0D14;
+  --color-space-slate: #101623;
+  --color-lunar-cyan: #38bdf8;
+  --color-lunar-amber: #f59e0b;
+  --color-gold-accent: #C5A880;
+  --color-gold-light: #E0CDB2;
+  --color-gold-dark: #8F7652;
+}
+
+/* Universal Typography & Font Smoothing: San Francisco & Space Grotesk everywhere */
+*, *::before, *::after, html, body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "SF Pro", "Space Grotesk", "Inter", -system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Apple UI & Grotesque Typography Utilities */
+.font-display,
+.font-michroma,
+.font-serif {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro", "Space Grotesk", "Inter", -system-ui, sans-serif !important;
+  letter-spacing: -0.02em;
+}
+
+.font-sans {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro", "Space Grotesk", "Inter", -system-ui, sans-serif !important;
+  letter-spacing: -0.01em;
+}
+
+.font-mono {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro", "Space Grotesk", "Inter", "Helvetica Neue", Arial, sans-serif !important;
+  letter-spacing: 0.02em;
+}
+
+/* Lenis smooth scrolling rules */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* Space aesthetic scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #05070B;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.2);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(56, 189, 248, 0.4);
+}
+
+/* Sci-fi HUD crosshair & grid helpers */
+.bg-grid-pattern {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+.bg-radial-vignette {
+  background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(5, 7, 11, 0.85) 100%);
+}
+
+.glass-panel {
+  background: rgba(10, 13, 20, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-card {
+  background: rgba(16, 22, 35, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.glass-card:hover {
+  border-color: rgba(56, 189, 248, 0.35);
+  box-shadow: 0 0 25px rgba(56, 189, 248, 0.12);
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(1000%); }
+}
+
+.animate-scanline {
+  animation: scanline 8s linear infinite;
+}
+
+/* ── Arc Wheel Carousel ─────────────────────────────────────────────────────
+   Pure-CSS rotation approach.
+   JS only writes `--rot` on the .wheel element.
+   Smooth easing is handled entirely by @property & transition on --rot.
+   No sin / cos / JS geometry math.
+──────────────────────────────────────────────────────────────────────────── */
+
+/* Register --rot so CSS can transition it natively */
+@property --rot {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0deg;
+}
+
+.wheel-scene {
+  /* 3-D perspective stage */
+  perspective: 1100px;
+  perspective-origin: 50% 30%;
+  height: 520px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  position: relative;
+  user-select: none;
+  touch-action: pan-y;
+  cursor: grab;
+}
+
+.wheel-scene:active {
+  cursor: grabbing;
+}
+
+/* Single wheel – the only element JS mutates (via --rot) */
+.wheel {
+  --rot: 0deg;
+  --radius: 340px;
+  --step: calc(360deg / var(--n));           /* evenly divide circle among n cards */
+  width: 0;
+  height: 0;
+  position: relative;
+  transform-style: preserve-3d;
+  /* transition ONLY --rot, not geometric transforms which break drag feel */
+  transition: --rot 0.72s cubic-bezier(0.25, 1, 0.35, 1);
+}
+
+.wheel-card {
+  --i: 0;                                    /* set inline by React */
+  position: absolute;
+  width: 380px;
+  top: 50%;
+  left: 50%;
+  /* Single transform: rotate card to its position on the rim, then push to radius */
+  transform:
+    translate(-50%, -50%)
+    rotateY(calc(var(--rot) + var(--i) * var(--step)))
+    translateZ(var(--radius));
+  transition: box-shadow 0.35s ease;
+  will-change: transform;
+}
+
+/* Mobile: tighter radius and narrower cards */
+@media (max-width: 640px) {
+  .wheel { --radius: 240px; }
+  .wheel-card { width: 88vw; }
+  .wheel-scene { height: 480px; }
+}
+
+@media (max-width: 380px) {
+  .wheel { --radius: 200px; }
+  .wheel-scene { height: 440px; }
+}
